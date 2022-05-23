@@ -76,29 +76,10 @@ function operate(num1, num2, operation) {
                 break;
     }  
 
-    return (Number.isInteger(result)) ? result : result.toFixed(3);   
-}
+    /* if number of digits after decimal places is more than 3 set the decimal place precision upto 3 places else return the result */
 
-// function add(num1, num2) {
-    // let result = (num1 + num2);
-    // previousExp.textContent = result;
-    // return result;
-// }
-// 
-// function subtract(num1, num2) {
-    // let result = (num1 - num2);
-    // previousExp.textContent = result;
-// }
-// 
-// function divide(num1, num2) {
-    // let result = (num1 / num2);
-    // previousExp.textContent = result;
-// }
-// 
-// function multiply(num1, num2) {
-    // let result = (num1 * num2);
-    // previousExp.textContent = result;
-// }
+    return (result.toString().includes('.') && result.toString().split('.')[1].length > 3) ? result.toFixed(3) : result;   
+}
 
 function clear() {
     num1 = '';
@@ -115,12 +96,14 @@ function deleteNum() {
 }
 
 function equals() {
-    // show result when equalto button is pressed
+    // show result when equalto button is pressed -- done
     num2 = output.textContent;
     previousExp.textContent = `${num1} ${operation} ${num2} =`
     output.textContent = operate(num1, num2, operation);
     num2 = '';
     operation = '';
     // don't let equal to work right after an operator
-    // show the output if there is only one number
+    // show the output if there is only one number -- done
 }
+
+// set input limit

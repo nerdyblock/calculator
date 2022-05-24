@@ -1,5 +1,5 @@
-let numberButton = document.querySelectorAll('[data-number]');
-let operationButton = document.querySelectorAll('[data-operation]');
+let numberButton = document.querySelectorAll('.number');
+let operationButton = document.querySelectorAll('.operation');
 
 let screen = document.querySelector('.screen');
 let previousExp = document.querySelector('.previous-expression'); 
@@ -13,54 +13,81 @@ let num1 = '';
 let num2 = '';
 let operation = '';
 
+window.addEventListener('keyup', function(e) {
+    let numButton = this.document.querySelector(`button[data-key="${e.key}"]`);
+    if(!numButton)  return;
+    appendNumber(numButton, true);
+});
+
+window.addEventListener('keyup', function(e) {
+    let opButton = this.document.querySelector(`button[data-operation="${e.key}"]`);
+    if(!opButton)  return;
+    appendOperator(opButton, true);
+});
+
 allClear.addEventListener('click', clear);
 
 del.addEventListener('click', deleteNum);
 
 equalTo.addEventListener('click', equals);
 
-numberButton.forEach(button => {
-    button.addEventListener('click', function() {
-        // make it a named function
-        if(button.textContent === '.' && output.textContent.includes('.')) {
+numberButton.forEach(button => 
+    button.addEventListener('click', appendNumber));
+
+operationButton.forEach(button => 
+    button.addEventListener('click', appendOperator));
+
+function appendNumber(e, isKey=false) {
+    let number;
+
+    if(isKey) {
+        number = e.textContent;
+    }
+    else {
+        number = e.target.textContent;
+    }
+
+    if((number === '.' && output.textContent.includes('.')) || output.textContent.length === 17) {
+        return;
+    }
+    output.textContent += number;
+}
+
+function appendOperator(e, isKey=false) {
+    let operator;
+
+    if(isKey) {
+        operator = e.textContent;
+    }
+    else {
+        operator = e.target.textContent;
+    }
+
+    if(output.textContent === '' && previousExp.textContent === '') {
+        if(operator === '+' || operator === '-'){
+            output.textContent = operator;
             return;
         }
-        if(output.textContent.length === 17) {
-            return;
-        }
-        output.textContent += button.textContent;
-    });
-});
+    }
 
-operationButton.forEach(button => {
-    button.addEventListener('click', function() {
-        // make it a named function
-        if(output.textContent === '' && previousExp.textContent === '') {
-            if(button.textContent === '+' || button.textContent === '-'){
-                output.textContent = button.textContent;
-                return;
-            }
-        }
+    if(!num1) {
+        num1 = output.textContent;
+        operation = operator;
+    }
+    else if(num1) {
+        num2 = output.textContent;
+        num1 = operate(num1, num2, operation);
+        num2 = '';
+        operation = operator; 
+    }
+    else {
+        num1 = output.textContent;
+        operation = operator;
+    }
 
-        if(!num1) {
-            num1 = output.textContent;
-            operation = button.textContent;
-        }
-        else if(num1) {
-            num2 = output.textContent;
-            num1 = operate(num1, num2, operation);
-            num2 = '';
-            operation = button.textContent; 
-        }
-        else {
-            num1 = output.textContent;
-            operation = button.textContent;
-        }
-
-        previousExp.textContent = `${num1} ${operation}`;
-        output.textContent = '';
-    });
-});
+    previousExp.textContent = `${num1} ${operation}`;
+    output.textContent = '';
+}
 
 function operate(num1, num2, operation) {
     let first = Number(num1);

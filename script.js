@@ -25,45 +25,47 @@ numberButton.forEach(button => {
         if(button.textContent === '.' && output.textContent.includes('.')) {
             return;
         }
+        if(output.textContent.length === 17) {
+            return;
+        }
         output.textContent += button.textContent;
     });
-    // add keydown event listener
 });
 
 operationButton.forEach(button => {
     button.addEventListener('click', function() {
         // make it a named function
-        // let user to input only + or - before entering number and count it as a part of first number
+        if(output.textContent === '' && previousExp.textContent === '') {
+            if(button.textContent === '+' || button.textContent === '-'){
+                output.textContent = button.textContent;
+                return;
+            }
+        }
 
-        if(previousExp.textContent.includes('=')) {
+        if(!num1) {
             num1 = output.textContent;
             operation = button.textContent;
-            previousExp.textContent = output.textContent + ' ' + button.textContent + ' ';
-            output.textContent = '';
         }
         else if(num1) {
             num2 = output.textContent;
-            previousExp.textContent = operate(num1, num2, operation);
-            num1 = previousExp.textContent;
-            operation = button.textContent;
-            previousExp.textContent += ' ' + button.textContent + ' ';
-            output.textContent = '';
+            num1 = operate(num1, num2, operation);
             num2 = '';
+            operation = button.textContent; 
         }
         else {
             num1 = output.textContent;
             operation = button.textContent;
-            previousExp.textContent += output.textContent + ' ' + button.textContent + ' ';
-            output.textContent = '';
         }
+
+        previousExp.textContent = `${num1} ${operation}`;
+        output.textContent = '';
     });
-    // add keydown eventlistener
 });
 
 function operate(num1, num2, operation) {
     let first = Number(num1);
     let second = Number(num2);
-    let result
+    let result;
 
     switch(operation) {
         case '+' : result = first + second;
@@ -72,12 +74,11 @@ function operate(num1, num2, operation) {
                 break;
         case '*' : result = first * second;
                 break;
-        case '/' : result = first / second;
+        case '÷' : result = first / second;
                 break;
     }  
 
     /* if number of digits after decimal places is more than 3 set the decimal place precision upto 3 places else return the result */
-
     return (result.toString().includes('.') && result.toString().split('.')[1].length > 3) ? result.toFixed(3) : result;   
 }
 
@@ -90,20 +91,19 @@ function clear() {
 }
 
 function deleteNum() {
-    let str = output.textContent;
-    str = str.slice(0, -1);
-    output.textContent = str;
+    output.textContent = output.textContent.slice(0, -1);
 }
 
 function equals() {
-    // show result when equalto button is pressed -- done
     num2 = output.textContent;
-    previousExp.textContent = `${num1} ${operation} ${num2} =`
+    if(num2 === '') {
+        return;
+    }
+
+    previousExp.textContent = '';
     output.textContent = operate(num1, num2, operation);
+
+    num1 = '';
     num2 = '';
     operation = '';
-    // don't let equal to work right after an operator
-    // show the output if there is only one number -- done
 }
-
-// set input limit

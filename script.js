@@ -1,119 +1,108 @@
-let numberButton = document.querySelectorAll('.number');
-let operationButton = document.querySelectorAll('.operation');
+const numberButton = document.querySelectorAll('[data-number]');
+const operationButton = document.querySelectorAll('[data-operation]');
 
-let screen = document.querySelector('.screen');
-let previousExp = document.querySelector('.previous-expression'); 
-let output = document.querySelector('.current-expression');
+const screen = document.querySelector('.screen');
+const previousExpression = document.querySelector('.previous-expression'); 
+const output = document.querySelector('.current-expression');
 
-let equalTo = document.querySelector('[data-equalto]');
-let allClear = document.querySelector('[data-all-clear]');
-let del = document.querySelector('[data-delete]');
+const equalTo = document.querySelector('[data-equalto]');
+const allClear = document.querySelector('[data-all-clear]');
+const del = document.querySelector('[data-delete]');
 
-let num1 = '';
-let num2 = '';
+const allButtons = document.querySelectorAll('button');
+
+let firstNumber = '';
+let secondNumber = '';
 let operation = '';
 
 window.addEventListener('keyup', function(e) {
-    let numButton = this.document.querySelector(`button[data-key="${e.key}"]`);
-    if(!numButton)  return;
-    appendNumber(numButton, true);
+    if(/^[0-9.]$/.test(e.key)) {
+        appendNumber(e.key);
+    }
+    else if(/[-*+/]/.test(e.key)) {
+        appendOperator(e.key);
+    }
+    else if(/Enter|=/.test(e.key)) {
+        equals();
+    }
+    else if(/Backspace/.test(e.key)) {
+        deleteNum();
+    }
 });
 
-window.addEventListener('keyup', function(e) {
-    let opButton = this.document.querySelector(`button[data-operation="${e.key}"]`);
-    if(!opButton)  return;
-    appendOperator(opButton, true);
-});
-
-allClear.addEventListener('click', clear);
+allClear.addEventListener('click', clearScreen);
 
 del.addEventListener('click', deleteNum);
 
 equalTo.addEventListener('click', equals);
 
 numberButton.forEach(button => 
-    button.addEventListener('click', appendNumber));
+    button.addEventListener('click', () => appendNumber(button.textContent)));
 
 operationButton.forEach(button => 
-    button.addEventListener('click', appendOperator));
+    button.addEventListener('click', () => appendOperator(button.textContent)));
 
-function appendNumber(e, isKey=false) {
-    let number;
+// remove focus from clicked button
+allButtons.forEach(button => 
+    button.addEventListener('click', e => e.target.blur() ));
 
-    if(isKey) {
-        number = e.textContent;
-    }
-    else {
-        number = e.target.textContent;
-    }
-
+function appendNumber(number) {
     if((number === '.' && output.textContent.includes('.')) || output.textContent.length === 17) {
         return;
     }
     output.textContent += number;
 }
 
-function appendOperator(e, isKey=false) {
-    let operator;
+function appendOperator(operator) {
 
-    if(isKey) {
-        operator = e.textContent;
-    }
-    else {
-        operator = e.target.textContent;
-    }
-
-    if(output.textContent === '' && previousExp.textContent === '') {
-        if(operator === '+' || operator === '-'){
-            output.textContent = operator;
-            return;
-        }
+    if(output.textContent === '' 
+        && previousExpression.textContent === '' 
+        && (operator === '+' || operator === '-')) {
+        output.textContent = operator;
+        return;
     }
 
-    if(!num1) {
-        num1 = output.textContent;
-        operation = operator;
-    }
-    else if(num1) {
-        num2 = output.textContent;
-        num1 = operate(num1, num2, operation);
-        num2 = '';
-        operation = operator; 
-    }
-    else {
-        num1 = output.textContent;
-        operation = operator;
-    }
+    firstNumber = (firstNumber) ? operate(firstNumber, output.textContent, operation) : output.textContent;
 
-    previousExp.textContent = `${num1} ${operation}`;
+    operation = operator;
+    previousExpression.textContent = `${firstNumber} ${operation}`;
     output.textContent = '';
 }
 
-function operate(num1, num2, operation) {
-    let first = Number(num1);
-    let second = Number(num2);
+function operate(firstNumber, secondNumber, operation) {
+    let first = Number(firstNumber);
+    let second = Number(secondNumber);
     let result;
 
     switch(operation) {
-        case '+' : result = first + second;
-                break;
-        case '-' : result = first - second;
-                break;
-        case '*' : result = first * second;
-                break;
-        case '÷' : result = first / second;
-                break;
+        case '+' :
+            result = first + second;
+            break;
+        case '-' :
+            result = first - second;
+            break;
+        case '*' :
+            result = first * second;
+            break;
+        case '÷' :
+        case '/' :
+            if (second === 0) {
+                alert('number cannot be divided by zero');
+                return;
+            }
+            result = first / second;
+            break;
     }  
 
     /* if number of digits after decimal places is more than 3 set the decimal place precision upto 3 places else return the result */
     return (result.toString().includes('.') && result.toString().split('.')[1].length > 3) ? result.toFixed(3) : result;   
 }
 
-function clear() {
-    num1 = '';
-    num2 = '';
+function clearScreen() {
+    firstNumber = '';
+    secondNumber = '';
     output.textContent = '';
-    previousExp.textContent = '';
+    previousExpression.textContent = '';
     operation = '';
 }
 
@@ -122,15 +111,14 @@ function deleteNum() {
 }
 
 function equals() {
-    num2 = output.textContent;
-    if(num2 === '') {
+    if(output.textContent === '') {
         return;
     }
 
-    previousExp.textContent = '';
-    output.textContent = operate(num1, num2, operation);
+    secondNumber = output.textContent;
+    previousExpression.textContent = '';
+    output.textContent = operate(firstNumber, secondNumber, operation);
 
-    num1 = '';
-    num2 = '';
+    firstNumber = ''
     operation = '';
 }

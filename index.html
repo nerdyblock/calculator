@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="image/png" sizes="32x32" rel="icon" href="image/icons8-calculator-32.png">
     <link rel="stylesheet" href="style.css">
     <title>Calculator</title>
 </head>
@@ -14,30 +15,44 @@
             <div class="current-expression"></div>
         </div>
         <div class="keypad">
-            <button class="key" data-delete>del</button>
+            <button class="key" data-delete>DEL</button>
             <button class="span-two" data-all-clear>AC</button>
-            <button class="key" data-operation>*</button>
+            <button class="key operation" data-operation>*</button>
 
             <button class="key" data-number>7</button>
             <button class="key" data-number>8</button>
             <button class="key" data-number>9</button>
-            <button class="key" data-operation>÷</button>
+            <button class="key operation" data-operation>÷</button>
 
             <button class="key" data-number>4</button>
             <button class="key" data-number>5</button>
             <button class="key" data-number>6</button>
-            <button class="key" data-operation>+</button>
+            <button class="key operation" data-operation>+</button>
 
             <button class="key" data-number>1</button>
             <button class="key" data-number>2</button>
             <button class="key" data-number>3</button>
-            <button class="key" data-operation>-</button>
+            <button class="key operation" data-operation>-</button>
 
             <button class="key" data-number>.</button>
             <button class="key" data-number>0</button>
             <button class="span-two" data-equalto>=</button>
         </div>
+        <div class="max-limit"></div>
     </div>
+    <footer>
+        <div>
+            <p>
+                Copyright ©
+                <script>document.write(new Date().getFullYear())</script>
+                nerdyblock
+            </p>
+            <a href="https://github.com/nerdyblock/calculator"><img src="image/iconmonstr-github-1.svg" height="30px"></a>
+        </div>
+        <div class="icon-credit">
+            <a target="_blank" href="https://icons8.com/icon/qrOXrfUDKkOX/calculator">Calculator</a>icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+        </div>
+    </footer>
 </body>
     <script src="script.js"></script>
 </html>

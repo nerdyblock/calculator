@@ -22,7 +22,6 @@ body {
     align-items: center;
     justify-content: center;
     margin: 40px;
-    margin-bottom: 14px;
 }
 
 .screen {
@@ -37,17 +36,21 @@ body {
     border: 8px solid rgb(245, 146, 89);
     border-width: 12px 13px 8px 12px;
     border-radius: 12px 12px 0 0;
+    word-wrap: break-word;
+    word-break: break-all;
+    flex-basis: content;
 }
 
 .previous-expression {
     color: rgba(255, 255, 255, .75);
     font-size: 1.5rem;
-    min-height: 1.6rem;
+    min-height: 1.9rem;
 }
 
 .current-expression {
     color: white;
     font-size: 2.5rem;
+    min-height: 2.9rem;
 }
 
 .keypad {
@@ -96,12 +99,7 @@ body {
     color: white;
 }
 
-.max-limit {
-    margin: 20px;
-}
-
 footer {
-    margin-top: 8px;
     bottom: 0;
     left: 0;
     display: flex;

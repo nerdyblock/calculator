@@ -1,3 +1,3 @@
 # calculator
 
-(link)[https://nerdyblock.github.io/calculator/]
+(https://nerdyblock.github.io/calculator/)[link]  

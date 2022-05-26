@@ -10,6 +10,7 @@ const allClear = document.querySelector('[data-all-clear]');
 const del = document.querySelector('[data-delete]');
 
 const allButtons = document.querySelectorAll('button');
+const maxLimit = document.querySelector('.max-limit');
 
 let firstNumber = '';
 let secondNumber = '';
@@ -22,7 +23,7 @@ window.addEventListener('keyup', function(e) {
     else if(/[-*+/]/.test(e.key)) {
         appendOperator(e.key);
     }
-    else if(/Enter|=/.test(e.key)) {
+    else if(/(Enter)|(=)/.test(e.key)) {
         equals();
     }
     else if(/Backspace/.test(e.key)) {
@@ -47,10 +48,16 @@ allButtons.forEach(button =>
     button.addEventListener('click', e => e.target.blur() ));
 
 function appendNumber(number) {
-    if((number === '.' && output.textContent.includes('.')) || output.textContent.length === 17) {
+    // max number limit upto 15 numbers
+    if((number === '.' && output.textContent.includes('.')) || output.textContent.length === 15) {
+        maxLimit.textContent = 'You have reached the max limit.';
         return;
     }
-    output.textContent += number;
+    else{
+        maxLimit.textContent = '';
+        output.textContent += number;
+    }
+  
 }
 
 function appendOperator(operator) {
@@ -94,8 +101,7 @@ function operate(firstNumber, secondNumber, operation) {
             break;
     }  
 
-    /* if number of digits after decimal places is more than 3 set the decimal place precision upto 3 places else return the result */
-    return (result.toString().includes('.') && result.toString().split('.')[1].length > 3) ? result.toFixed(3) : result;   
+    return Math.round(result * 1000) / 1000;  
 }
 
 function clearScreen() {
@@ -104,17 +110,19 @@ function clearScreen() {
     output.textContent = '';
     previousExpression.textContent = '';
     operation = '';
+    maxLimit.textContent = '';
 }
 
 function deleteNum() {
     output.textContent = output.textContent.slice(0, -1);
+    maxLimit.textContent = '';
 }
 
 function equals() {
-    if(output.textContent === '') {
+    if(output.textContent === '' || operation === '') {
         return;
     }
-
+    
     secondNumber = output.textContent;
     previousExpression.textContent = '';
     output.textContent = operate(firstNumber, secondNumber, operation);

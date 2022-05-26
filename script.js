@@ -10,7 +10,6 @@ const allClear = document.querySelector('[data-all-clear]');
 const del = document.querySelector('[data-delete]');
 
 const allButtons = document.querySelectorAll('button');
-const maxLimit = document.querySelector('.max-limit');
 
 let firstNumber = '';
 let secondNumber = '';
@@ -48,28 +47,37 @@ allButtons.forEach(button =>
     button.addEventListener('click', e => e.target.blur() ));
 
 function appendNumber(number) {
-    // max number limit upto 15 numbers
-    if((number === '.' && output.textContent.includes('.')) || output.textContent.length === 15) {
-        maxLimit.textContent = 'You have reached the max limit.';
+    if((number === '.' && output.textContent.includes('.'))) {
         return;
     }
-    else{
-        maxLimit.textContent = '';
-        output.textContent += number;
-    }
-  
+        
+    output.textContent += number;
 }
 
 function appendOperator(operator) {
 
-    if(output.textContent === '' 
-        && previousExpression.textContent === '' 
-        && (operator === '+' || operator === '-')) {
-        output.textContent = operator;
-        return;
+    if(output.textContent === '' && previousExpression.textContent === '' ){
+        if (operator === '+' || operator === '-') {
+            output.textContent = operator;
+            return;
+        }
+        else {
+            return;
+        }
     }
 
-    firstNumber = (firstNumber) ? operate(firstNumber, output.textContent, operation) : output.textContent;
+    if(firstNumber) {
+        if(output.textContent === '') {
+            operation = operator;
+            previousExpression.textContent = `${firstNumber} ${operation}`;
+            return;
+        }
+        secondNumber = output.textContent;
+        firstNumber = operate(firstNumber, secondNumber, operation);
+    }
+    else {
+        firstNumber = output.textContent
+    }
 
     operation = operator;
     previousExpression.textContent = `${firstNumber} ${operation}`;
@@ -101,7 +109,7 @@ function operate(firstNumber, secondNumber, operation) {
             break;
     }  
 
-    return Math.round(result * 1000) / 1000;  
+    return (Math.round(result * 1000) / 1000).toString();
 }
 
 function clearScreen() {
@@ -110,19 +118,17 @@ function clearScreen() {
     output.textContent = '';
     previousExpression.textContent = '';
     operation = '';
-    maxLimit.textContent = '';
 }
 
 function deleteNum() {
     output.textContent = output.textContent.slice(0, -1);
-    maxLimit.textContent = '';
 }
 
 function equals() {
     if(output.textContent === '' || operation === '') {
         return;
     }
-    
+
     secondNumber = output.textContent;
     previousExpression.textContent = '';
     output.textContent = operate(firstNumber, secondNumber, operation);

@@ -5,12 +5,24 @@
     padding: 0px;
 }
 
+html {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+body {
+    background: linear-gradient(to right, #e66465, #9198e5);
+}
+
 .calc-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    margin: 40px;
+    margin-bottom: 14px;
 }
 
 .screen {
@@ -18,17 +30,19 @@
     flex-direction: column;
     background-color: rgba(0, 0, 0, .75);
     width: 400px;
-    height: 100px;
+    height: 120px;
     align-items: flex-end;
     justify-content: space-around;
     padding: 10px;
-    word-wrap: break-word;
-    word-break: break-all;
+    border: 8px solid rgb(245, 146, 89);
+    border-width: 12px 13px 8px 12px;
+    border-radius: 12px 12px 0 0;
 }
 
 .previous-expression {
     color: rgba(255, 255, 255, .75);
     font-size: 1.5rem;
+    min-height: 1.6rem;
 }
 
 .current-expression {
@@ -39,15 +53,80 @@
 .keypad {
     display: flex;
     width: 400px;
+    align-content: center;
+    justify-content: center;
     flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 10px 20px 10px;
+    background-color: rgb(245, 146, 89);
+    border-radius: 0 0 10px 10px;
 }
 
 .key {
-    flex-basis: 25%;
-    height: 80px;
+    border-radius: 5px;
+    flex-basis: 22%;
+    height: 70px;
+    font-size: 24px;
+}
+
+.operation {
+    background-color: rgb(109, 207, 202);
+    color: white;
 }
 
 .span-two {
-    flex: 50%;
-    height: 80px;
+    border-radius: 5px;
+    flex-basis: 46%;
+    height: 70px;
+    font-size: 24px
+}
+
+.key:hover,
+.span-two:hover {
+    background-color: rgb(226, 220, 220);
+}
+
+.operation:hover,
+[data-equalto]:hover {
+    background-color: rgb(36, 206, 197);
+}
+
+[data-equalto] {
+    background-color: rgb(109, 207, 202);
+    color: white;
+}
+
+.max-limit {
+    margin: 20px;
+}
+
+footer {
+    margin-top: 8px;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+footer > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 5px;
+    font-size: 20px;
+}
+
+.icon-credit {
+    font-size: 16px;
+    font-weight: bold;
+    gap: 4px;
+}
+
+.icon-credit > a {
+    text-decoration: none;
+    color: black;
 }

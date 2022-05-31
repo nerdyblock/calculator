@@ -121,6 +121,9 @@ function clearScreen() {
 }
 
 function deleteNum() {
+    if(output.textContent == '' && previousExpression.textContent != '') {
+        previousExpression.textContent = previousExpression.textContent.slice(0, -1);
+    }
     output.textContent = output.textContent.slice(0, -1);
 }
 
